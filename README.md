@@ -24,7 +24,15 @@ As mentioned, for the meta data dataset I did a fair bit of feature engineering 
 The user data and recipe data are connected through unique recipe_id. 
 
 ## Models
+I utilized collaborative filtering method to create the recommendation system. Collaborative filtering takes a user-to-user based approach where user profiles are created for like users. Then ratings for unrated recipes are predicted for a user based on these user profiles, i.e. the ratings of like users. The limitation of this approach is that users must have already reviewed recipes in order to have predicted ratings. A content based approach would need to be implemented to solve the cold start problem and allow new users to receive recommendations. Once these new users have reviewed a recipe they can be placed into the collaborative filtering model. 
 
+To create recommendation systems I used the Surprise library. The performance of each of the models run is illustrated below. 
+
+<RMSE graph for all the models> 
+  
+Once I determined the best model for my data, I created a recommendation function that takes in the user_id, the requested ingredient, any food types they may be looking to make, and the number of recipes. The tool then outputs the number of recipess containing that ingredient within the subset of food types based on predicted ratings that are calcuulated from that user's preferences compared to like users. An example is below. 
+  
+<Example of output from collaborative filtering model>
 
 ## Deployment: Application Creation
 
