@@ -17,7 +17,11 @@ I downloaded the RAW_recipes.csv and RAW_interactions.csv locally to my computer
 Next, I dealt with the RAW_interactions.csv in the jupyter notebook entitled "meta_data_workbook_2". In that notebook I cleaned the data to have usable ingredients columns, created new nuitrition facts columns, and used a function to subcategorize recipes based on their food type. The final metadata recipe dataset was then called recipes_subcat_cleaned.csv and can be found in the git Data repository. 
 
 ## Data Preperation
+My final dataset included data from XX recipes with reviews from XX users. For collaborative filtering purposes, I cleaned the data to include only user reviews from users that had 5 or more reviews and recipes with only 5 or more reviewers. Ratings initially ranged from 0-5, but upon further inspection, I found that 0 ratings were placeholders for unrated reviews and ranged from positive reviews, negative reviews, and reviews that indicated that the users never actully tried the meals. Because these 0 ratings made up only 2% of the dataset and because the reviews were unreliable, I dropped these values. Further exploration of the reviews using NLP methods with KNN clustering imputation could have helped classify the 0 ratings. However, that process would have lead to data leakage concerns and ultimately was dismissed. Once the 0 ratings were dropped, I had to further reduce the dataset to 5 or more reviews from 5 more reviewers. This resulted in aloss of 25% of recipes and 10% of users. 
 
+As mentioned, for the meta data dataset I did a fair bit of feature engineering to create nuitrition features and food type subcategories. You can see the exact process in the jupyter notebook entitled meta_data_workbook. 
+
+The user data and recipe data are connected through unique recipe_id. 
 
 ## Models
 
