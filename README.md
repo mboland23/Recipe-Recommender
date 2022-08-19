@@ -17,7 +17,9 @@ I downloaded the RAW_recipes.csv and RAW_interactions.csv locally to my computer
 Next, I dealt with the RAW_interactions.csv in the jupyter notebook entitled "meta_data_workbook_2". In that notebook I cleaned the data to have usable ingredients columns, created new nuitrition facts columns, and used a function to subcategorize recipes based on their food type. The final metadata recipe dataset was then called recipes_subcat_cleaned.csv and can be found in the git Data repository. 
 
 ## Data Preperation
-My final dataset included data from XX recipes with reviews from XX users. For collaborative filtering purposes, I cleaned the data to include only user reviews from users that had 5 or more reviews and recipes with only 5 or more reviewers. Ratings initially ranged from 0-5, but upon further inspection, I found that 0 ratings were placeholders for unrated reviews and ranged from positive reviews, negative reviews, and reviews that indicated that the users never actully tried the meals. Because these 0 ratings made up only 2% of the dataset and because the reviews were unreliable, I dropped these values. Further exploration of the reviews using NLP methods with KNN clustering imputation could have helped classify the 0 ratings. However, that process would have lead to data leakage concerns and ultimately was dismissed. Once the 0 ratings were dropped, I had to further reduce the dataset to 5 or more reviews from 5 more reviewers. This resulted in aloss of 25% of recipes and 10% of users. 
+My final dataset included 537,267 reviews of 40,526 recipes from 17,096 users. For collaborative filtering purposes, I cleaned the data to include only user reviews from users that had 5 or more reviews and recipes with only 5 or more reviewers. Ratings initially ranged from 0-5, but upon further inspection, I found that 0 ratings were placeholders for unrated reviews and ranged from positive reviews, negative reviews, and reviews that indicated that the users never actully tried the meals. Because these 0 ratings made up only 2% of the dataset and because the reviews were unreliable, I dropped these values. Further exploration of the reviews using NLP methods with KNN clustering imputation could have helped classify the 0 ratings. However, that process would have lead to data leakage concerns and ultimately was dismissed. Once the 0 ratings were dropped, I had to further reduce the dataset to 5 or more reviews from 5 more reviewers. This resulted in aloss of 25% of recipes and 10% of users. 
+
+<<Image>>
 
 As mentioned, for the meta data dataset I did a fair bit of feature engineering to create nuitrition features and food type subcategories. You can see the exact process in the jupyter notebook entitled meta_data_workbook. 
 
@@ -39,13 +41,12 @@ Once I determined the best model for my data, I created a recommendation functio
 
 
 ## Conclusions 
+The final recommendation system is able to predict ratings that are 0.56 points from true ratings, meaning it is fairly accurate in pulling recipes that the user would like to cook — a necessary element to encourage users to cook expiring food rather than waste the food. Further, the recommender app does not recommend recipes that the user has already reviewed — allowing the user to discover new recipes. It also prioritizes the best match (highest expected rating) recipes with the input ingredient for that user. This is especially important for future use. If the user does not like a recipe recommended, they may not come back to the app - running the risk of wasted food. Finally, the recommender system allows users to denote if they would like to make a certain type of meal. This is important for users that have meal limitations. 
 
+While the recommendation application helps encourage the reduction of food waste at the household level, it does have limitations. First, since 79% of our original data comprised of reviews with 5 point rating, the recommender system skews to higher predicted ratings. This means that the difference between .01 predicted points at the higher end could be more significant than at lower levels. To remedy, one could repredict ratings of the original dataset using NLP. Further, the system does not take into account indiscriminate raters - or users that rate all recipes the same. This makes it more difficult to discern these user's preferences and thus their recommendations may not be as accurate. To fix this issue, we could again repredict their ratings based on the language of their reviews or follow up with more specific feedback. Finally, the collaborative filtering approach only works for users that have already reviewed recipes - new users cannot recieve predictions. This cold start probem could be remedied by recommending the highest rated recipes with a given ingredient to that user and asking them to review. They then could be added to the collaborative filtering pipeline. 
 
-
-## Next Steps
-
-
-
+Overall, the application can help reduce food waste at the household level by allowing users to input ingredients that they currently have and delivering recipes that are relevant, matched to the user, and expected to be enjoyed. 
+  
 ## Repository Structure
 
 
