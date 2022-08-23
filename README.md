@@ -19,7 +19,7 @@ Next, I dealt with the RAW_interactions.csv in the jupyter notebook entitled "me
 ## Data Preparation
 My final dataset included 537,267 reviews of 40,526 recipes from 17,096 users. For collaborative filtering purposes, I cleaned the data to include only user reviews from users that had 5 or more reviews and recipes with only 5 or more reviewers. Ratings initially ranged from 0-5, but upon further inspection, I found that 0 ratings were placeholders for unrated reviews and ranged from positive reviews, negative reviews, and reviews that indicated that the users never actully tried the meals. Because these 0 ratings made up only 2% of the dataset and because the reviews were unreliable, I dropped these values. Further exploration of the reviews using NLP methods with KNN clustering imputation could have helped classify the 0 ratings. However, that process would have lead to data leakage concerns and ultimately was dismissed. Once the 0 ratings were dropped, I had to further reduce the dataset to 5 or more reviews from 5 more reviewers. This resulted in aloss of 25% of recipes and 10% of users. 
 
-<<Image>>
+![rating distribution](https://github.com/mboland23/Recipe-Recommender/blob/main/Images/rating_dist.png)
 
 As mentioned, for the meta data dataset I did a fair bit of feature engineering to create nuitrition features and food type subcategories. You can see the exact process in the jupyter notebook entitled meta_data_workbook. 
 
@@ -30,14 +30,34 @@ I utilized collaborative filtering method to create the recommendation system. C
 
 To create recommendation systems I used the Surprise library. The performance of each of the models run is illustrated below. 
 
-<RMSE graph for all the models> 
+![model performance](https://github.com/mboland23/Recipe-Recommender/blob/main/Images/model_performance.png)
   
 Once I determined the best model for my data, I created a recommendation function that takes in the user_id, the requested ingredient, any food types they may be looking to make, and the number of recipes. The tool then outputs the number of recipess containing that ingredient within the subset of food types based on predicted ratings that are calcuulated from that user's preferences compared to like users. An example is below. 
   
 <Example of output from collaborative filtering model>
 
-## Deployment: Application Creation
+## Function Walk Through
+The collaborative functioning filter created for users takes in four main inputs - the user ID, ingredient of interest, recipe type, and number of recipes. The function then outputs a given number of recipes that match the inputs for that user ID and that are predicted to be top rated. Below you can see two examples of the output of the function for the same user. The first is inputting two different ingredients and keeping the food type the same. In this case we use the subcategory of "any", which denotes any recipe (essentially no subcategory filtering". You can see the difference in the recommendations below.
 
+First, we see the recommendations for chicken as the ingredient. 
+  
+![ingredient = chicken](https://github.com/mboland23/Recipe-Recommender/blob/main/Images/rec_chicken_any.png)
+
+ Now, we see the recommendations for beef as the ingredient.
+ 
+![ingredient = beef](https://github.com/mboland23/Recipe-Recommender/blob/main/Images/rec_beef_any.png)
+ 
+Next, we can take a look at recommendations for the same ingredient, but that fall in different food type subcategories. There are 8 subcategories available to choose from: any (no subcategory), vegetarian, not vegetarian, beverage, dessert, low cal, low carb, and sugar free.
+  
+Here is a look at recommendations of tomato recipes for the same user as above with the food type subcategory as vegetarian. 
+
+![food type = vegetarian](https://github.com/mboland23/Recipe-Recommender/blob/main/Images/rec_tomato_veg.png)
+
+And here is a look at the recommendations fo tomato recipes for that user with the subcategory as not vegetarian.
+
+![food type = not vegetarian](https://github.com/mboland23/Recipe-Recommender/blob/main/Images/rec_tomato_nonveg.png)
+
+For more on the recommendation function, including the dictionary of ingredient variations that ensures recipes that have variations (diced tomato vs. tomato) are taken into account in the ingredient input, please look at the recommendation_function_workbook. 
 
 
 ## Conclusions 
