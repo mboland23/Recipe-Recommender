@@ -3,6 +3,8 @@
 ## Overview
 This project aims to help reduce food waste on the consumer level by using collaborative filtering methods to create a recipe recommender that allows users to input food items in their fridge that are about to expire and then outputs recipe recommendations based on the user's past recipe ratings that include that ingredient. 
 
+![food waste](https://github.com/mboland23/Recipe-Recommender/blob/main/Images/food_waste_image.jpeg)
+
 ## Business Problem: 
 Food waste - or food that is fit for consumption but disposed of - is a major problem in the US with up to 40% of food produced going uneaten, according to [Harvard’s School of Public Health](https://www.hsph.harvard.edu/nutritionsource/sustainability/food-waste/). Further, there are environmental effects of food waste. 95% of uneaten food goes to landfills. This decomposing food produces methane gasses, which is a significant contributor to global warming and subsequently adds to climate change.  The reduction of food waste could not only lead to savings costs for consumers, but also help curb contributors to climate change. 
 
