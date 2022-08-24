@@ -4,24 +4,51 @@
 This project aims to help reduce food waste on the consumer level by using collaborative filtering methods to create a recipe recommender that allows users to input food items in their fridge that are about to expire and then outputs recipe recommendations based on the user's past recipe ratings that include that ingredient. 
 
 ## Business Problem: 
-Food waste - or food that is fit for consumption but disposed of - is a major problem in the US with up to 40% of food produced going uneaten, according to [Harvard’s School of Public Health](https://www.hsph.harvard.edu/nutritionsource/sustainability/food-waste/). Further, there are environmental effects of food waste. 95% of uneaten food goes to landfills. This decomposing food produces methane gasses, which is a significant contributor to global warming and subsequently adds to climate change. The reduction of food waste could not only lead to savings costs for consumers, but also help curb contributors to climate change. 
+Food waste - or food that is fit for consumption but disposed of - is a major problem in the US with up to 40% of food produced going uneaten, according to [Harvard’s School of Public Health](https://www.hsph.harvard.edu/nutritionsource/sustainability/food-waste/). Further, there are environmental effects of food waste. 95% of uneaten food goes to landfills. This decomposing food produces methane gasses, which is a significant contributor to global warming and subsequently adds to climate change.  The reduction of food waste could not only lead to savings costs for consumers, but also help curb contributors to climate change. 
 
-By creating a food recommendation tool that takes into account what already exists in the consumer's fridge as well as that consumer's preferences, the hope is recipes will not only be relevant to the consumer, but also encourage them to use those ingredients rather than get rid of them. 
+While much of food waste comes at the macro level (transporation networks, restaurants and organizations), households prove to waste a substantial aamount food - 1/3 of food obtained by households is wasted, according to [The Economist](https://www.economist.com/the-economist-explains/2016/08/28/why-wasting-food-is-bad-for-the-planet). By creating a food recommendation tool that takes into account what already exists in the consumer's fridge as well as that consumer's preferences, recipes will not only be relevant to the consumer, but also encourage consumers to use those ingredients rather than waste them.
 
 ## Data Understanding 
 Data for this project came from Kaggle and looks at consumer [reviews and ratings](https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions) of recipes from Food.com. For the purposes of this project, I used the RAW_recipes and RAW_interactions csv files to build new datasets. The original files are too large to add to Github and thus instructions on how to replicate my process can be found below.
 
 ### Data Instructions
-I downloaded the RAW_recipes.csv and RAW_interactions.csv locally to my computer. These are large files and will take some time to open in a jupyter notebook. First, I cleaned the RAW_interactions.csv file in my juptyer notebook to include only recipes that had at least five reviews and users that had at least five reviews - you can follow the notebook entitled "reading_in_data.ipnyb" to find initial cleaning instructions. I saved off this new dataset as  user_reviews.csv. I then further cleaned the dataset in a notebook entitled "preprocessing_no_0s", which explores the presence of 0 ratings and eventually drops those rows and creates a new dataset of recipes with five reviews and users with five ratings. This dataset, which can be found in the git Data repository is called "user_reviews_no_zero.csv". This data was used for the remainder of the modeling and application. 
+I downloaded the RAW_recipes.csv and RAW_interactions.csv locally to my computer in a Data file in the project repository. These are large files and will take some time to open in a jupyter notebook. First, I cleaned the RAW_interactions.csv file in my juptyer notebook to include only recipes that had at least five reviews and users that had at least five reviews - you can follow the notebook entitled "reading_in_data.ipnyb" to find initial cleaning instructions. I saved off this new dataset as  user_reviews.csv. I then further cleaned the dataset in a notebook entitled "preprocessing_no_0s", which explores the presence of 0 ratings and eventually drops those rows and creates a new dataset of recipes with five reviews and users with five ratings. This dataset, which can be found in the git Data repository, is called "user_reviews_no_zero.csv". This data was used for the remainder of the modeling and application. 
 
 Next, I dealt with the RAW_interactions.csv in the jupyter notebook entitled "meta_data_workbook_2". In that notebook I cleaned the data to have usable ingredients columns, created new nuitrition facts columns, and used a function to subcategorize recipes based on their food type. The final metadata recipe dataset was then called recipes_subcat_cleaned.csv and can be found in the git Data repository. 
 
 ## Data Preparation
-My final dataset included 537,267 reviews of 40,526 recipes from 17,096 users. For collaborative filtering purposes, I cleaned the data to include only user reviews from users that had 5 or more reviews and recipes with only 5 or more reviewers. Ratings initially ranged from 0-5, but upon further inspection, I found that 0 ratings were placeholders for unrated reviews and ranged from positive reviews, negative reviews, and reviews that indicated that the users never actully tried the meals. Because these 0 ratings made up only 2% of the dataset and because the reviews were unreliable, I dropped these values. Further exploration of the reviews using NLP methods with KNN clustering imputation could have helped classify the 0 ratings. However, that process would have lead to data leakage concerns and ultimately was dismissed. Once the 0 ratings were dropped, I had to further reduce the dataset to 5 or more reviews from 5 more reviewers. This resulted in aloss of 25% of recipes and 10% of users. 
+My final dataset included 537,267 reviews of 40,526 recipes from 17,096 users. 
+
+### User Review Data
+For collaborative filtering purposes, I cleaned the data to include only user reviews from users that had 5 or more reviews and recipes with only 5 or more reviewers. Ratings initially ranged from 0-5, but upon further inspection, I found that 0 ratings were placeholders for unrated reviews and ranged from positive reviews, negative reviews, and reviews that indicated that the users never actully tried the meals. Because these 0 ratings made up only 2% of the dataset and because the reviews were unreliable, I dropped these values. Further exploration of the reviews using NLP methods with KNN clustering imputation could have helped classify the 0 ratings. However, that process would have lead to data leakage concerns and ultimately was dismissed. Once the 0 ratings were dropped, I had to further reduce the dataset to 5 or more reviews from 5 more reviewers. This resulted in aloss of 25% of recipes and 10% of users. 
 
 ![rating distribution](https://github.com/mboland23/Recipe-Recommender/blob/main/Images/rating_dist.png)
 
-As mentioned, for the meta data dataset I did a fair bit of feature engineering to create nuitrition features and food type subcategories. You can see the exact process in the jupyter notebook entitled meta_data_workbook. 
+### Recipe Data
+The recipe data - or metadata - contains all of the information regarding the recipes reviewed in the user_reviews dataset. This recipe data is used in the collaborative filtering process to help with subfiltering recommended recipes. 
+
+The recipe data underwent substantial feature engineering - creating new nuitrition columns:
+ - calories (#)
+ - total fat (PDV)
+ - sugar (PDV)
+ - sodium (PDV)
+ - protein (PDV)
+ - saturated fat (PDV)
+ - Carbohydrates(PDV)
+
+It also breaks out the ingredients column, which is originally a string of ingredients into a list of ingredients.
+
+Finally, I created a subcategorization function that labeled recipes on 8 different food types that would allow users to subset based on food type in the recommendation tool. The last three subcategorizations are taken from the new nuitrition columns. The recipe type subcategorizations are as follows (note: recipes can fall in multiple categories and all recipes fall under the any subcategorization): 
+ - any (no subcategorization)
+ - vegetarian
+ - not vegetarian
+ - beverage
+ - dessert
+ - low carb
+ - low cal
+ - sugar free
+
+For a detailed look at the manipulation of the recipe/meta data please refer to the meta_data_workbook_2. The rest of this notebook uses the final csv file called "recipes_subcat_cleaned 2.csv" from this workbook. 
 
 The user data and recipe data are connected through unique recipe_id. 
 
@@ -61,13 +88,40 @@ For more on the recommendation function, including the dictionary of ingredient 
 
 
 ## Conclusions 
+### Evaluation
 The final recommendation system is able to predict ratings that are 0.56 points from true ratings, meaning it is fairly accurate in pulling recipes that the user would like to cook — a necessary element to encourage users to cook expiring food rather than waste the food. Further, the recommender app does not recommend recipes that the user has already reviewed — allowing the user to discover new recipes. It also prioritizes the best match (highest expected rating) recipes with the input ingredient for that user. This is especially important for future use. If the user does not like a recipe recommended, they may not come back to the app - running the risk of wasted food. Finally, the recommender system allows users to denote if they would like to make a certain type of meal. This is important for users that have meal limitations. 
 
+### Limitations
 While the recommendation application helps encourage the reduction of food waste at the household level, it does have limitations. First, since 79% of our original data comprised of reviews with 5 point rating, the recommender system skews to higher predicted ratings. This means that the difference between .01 predicted points at the higher end could be more significant than at lower levels. To remedy, one could repredict ratings of the original dataset using NLP. Further, the system does not take into account indiscriminate raters - or users that rate all recipes the same. This makes it more difficult to discern these user's preferences and thus their recommendations may not be as accurate. To fix this issue, we could again repredict their ratings based on the language of their reviews or follow up with more specific feedback. Finally, the collaborative filtering approach only works for users that have already reviewed recipes - new users cannot recieve predictions. This cold start probem could be remedied by recommending the highest rated recipes with a given ingredient to that user and asking them to review. They then could be added to the collaborative filtering pipeline. 
 
+### Next Steps
+1. Determine whether 5 ratings are unique to our dataset or common to recipe reviews in general. NLP could help standardize ratings and reduce some of the high end skew of our data. 
+2. Parse out preferences of indiscriminate reviewers through NLP. 
+3. Solve cold start problem by creating a function that recommends the highest reviewed and rated recipes for a given ingredient. This would allow users to enter the pipeline for collaborative filtering. 
+
 Overall, the application can help reduce food waste at the household level by allowing users to input ingredients that they currently have and delivering recipes that are relevant, matched to the user, and expected to be enjoyed. 
-  
+
 ## Repository Structure
+├── Data
+│   ├── meta_Beauty.json.gz
+│   ├── reviews_Beauty_5.json.gz
+├── images
+│   ├── recommended_fragrance_products.png
+│   ├── recommended_products.png
+│   ├── reviews_distribution.png
+│   ├── reviews_per_product.png
+│   ├── reviews_per_user.png
+├── working_notebooks
+│   ├── Alex_notebook_2.ipynb
+│   ├── Alex_notebook_metadata.ipynb
+│   ├── jillian_notebook.ipynb
+│   ├── meg_notebook.ipynb
+├── .gitignore
+├── LICENSE
+├── README.md
+├── final_notebook.ipynb
+├── final_presentation.pdf
+└── final_notebook.pdf
 
 
 
