@@ -8,7 +8,7 @@ This project aims to help reduce food waste on the consumer level by using colla
 ## Business Problem: 
 Food waste - or food that is fit for consumption but disposed of - is a major problem in the US with up to 40% of food produced going uneaten, according to [Harvard’s School of Public Health](https://www.hsph.harvard.edu/nutritionsource/sustainability/food-waste/). Further, there are environmental effects of food waste. 95% of uneaten food goes to landfills. This decomposing food produces methane gasses, which is a significant contributor to global warming and subsequently adds to climate change.  The reduction of food waste could not only lead to savings costs for consumers, but also help curb contributors to climate change. 
 
-While much of food waste comes at the macro level (transporation networks, restaurants and organizations), households prove to waste a substantial aamount food - 1/3 of food obtained by households is wasted, according to [The Economist](https://www.economist.com/the-economist-explains/2016/08/28/why-wasting-food-is-bad-for-the-planet). By creating a food recommendation tool that takes into account what already exists in the consumer's fridge as well as that consumer's preferences, recipes will not only be relevant to the consumer, but also encourage consumers to use those ingredients rather than waste them.
+While much of food waste comes at the macro level (transporation networks, restaurants and organizations), households prove to waste a substantial amount food - 1/3 of food obtained by households is wasted, according to [The Economist](https://www.economist.com/the-economist-explains/2016/08/28/why-wasting-food-is-bad-for-the-planet). By creating a food recommendation tool that takes into account what already exists in the consumer's fridge as well as that consumer's preferences, recipes will not only be relevant to the consumer, but also encourage consumers to use those ingredients rather than waste them.
 
 ## Data Understanding 
 Data for this project came from Kaggle and looks at consumer [reviews and ratings](https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions) of recipes from Food.com. For the purposes of this project, I used the RAW_recipes and RAW_interactions csv files to build new datasets. The original files are too large to add to Github and thus instructions on how to replicate my process can be found below.
@@ -38,9 +38,9 @@ The recipe data underwent substantial feature engineering - creating new nuitrit
  - saturated fat (PDV)
  - Carbohydrates(PDV)
 
-It also breaks out the ingredients column, which is originally a string of ingredients into a list of ingredients.
+It also breaks out the ingredients column, which was originally a string of ingredients into a list of ingredients.
 
-Finally, I created a subcategorization function that labeled recipes on 8 different food types that would allow users to subset based on food type in the recommendation tool. The last three subcategorizations are taken from the new nuitrition columns. The recipe type subcategorizations are as follows (note: recipes can fall in multiple categories and all recipes fall under the any subcategorization): 
+Finally, I created a subcategorization function that labeled recipes on 8 different food types that would allow users to subset based on food type in the recommendation tool. The last three subcategorizations are taken from the new nuitrition columns. The recipe type subcategorizations are as follows (note: recipes can fall in multiple categories and all recipes fall under the 'any' subcategorization): 
  - any (no subcategorization)
  - vegetarian
  - not vegetarian
@@ -55,7 +55,7 @@ For a detailed look at the manipulation of the recipe/meta data please refer to 
 The user data and recipe data are connected through unique recipe_id. 
 
 ## Models
-I utilized collaborative filtering method to create the recommendation system. Collaborative filtering takes a user-to-user based approach where user profiles are created for like users. Then ratings for unrated recipes are predicted for a user based on these user profiles, i.e. the ratings of like users. The limitation of this approach is that users must have already reviewed recipes in order to have predicted ratings. A content based approach would need to be implemented to solve the cold start problem and allow new users to receive recommendations. Once these new users have reviewed a recipe they can be placed into the collaborative filtering model. 
+I utilized collaborative filtering method to create the recommendation system. Collaborative filtering takes a user-to-user based approach where user profiles are created for like users. Then ratings for unrated recipes are predicted for a user based on these user profiles, i.e. the ratings of like users. The limitation of this approach is that users must have already reviewed recipes in order to have predicted ratings. Another approach would need to be implemented to solve the cold start problem and allow new users to receive recommendations. Once these new users have reviewed a recipe they can be placed into the collaborative filtering model. 
 
 To create recommendation systems I used the Surprise library. The performance of each of the models run is illustrated below. 
 
@@ -65,7 +65,7 @@ Once I determined the best model for my data, I created a recommendation functio
 
 
 ## Recommendation Tool
-The collaborative filtering function created for users takes in four main inputs - the user ID, ingredient of interest, recipe type, and number of recipes. The function then outputs a given number of recipes that match the inputs for that user ID and that are predicted to be top rated. Below you can see two examples of the output of the function for the same user. The first is inputting two different ingredients and keeping the food type the same. In this case we use the subcategory of "any", which denotes any recipe (essentially no subcategory filtering". You can see the difference in the recommendations below.
+The collaborative filtering function created for users takes in four main inputs - the user ID, ingredient of interest, recipe type, and number of recipes. The function then outputs a given number of recipes that match the inputs for that user ID and that are predicted to be top rated. Below you can see two examples of the output of the function for the same user. The first is inputting two different ingredients and keeping the food type the same. In this case we use the subcategory of "any", which denotes any recipe - essentially no subcategory filtering. You can see the difference in the recommendations below.
 
 First, we see the recommendations for chicken as the ingredient. 
   
@@ -90,7 +90,7 @@ For more on the recommendation function, including the dictionary of ingredient 
 
 ## Conclusions 
 ### Evaluation
-The final recommendation system is able to predict ratings that are 0.56 points from true ratings, meaning it is fairly accurate in pulling recipes that the user would like to cook — a necessary element to encourage users to cook expiring food rather than waste the food. Further, the recommender app does not recommend recipes that the user has already reviewed — allowing the user to discover new recipes. It also prioritizes the best match (highest expected rating) recipes with the input ingredient for that user. This is especially important for future use. If the user does not like a recipe recommended, they may not come back to the app - running the risk of wasted food. Finally, the recommender system allows users to denote if they would like to make a certain type of meal. This is important for users that have meal limitations. 
+The final recommendation system is able to predict ratings that are 0.56 points from true ratings, meaning it is fairly accurate in pulling recipes that the user would like to cook — a necessary element to encourage users to cook expiring food rather than waste the food. Further, the recommender app does not recommend recipes that the user has already reviewed — allowing the user to discover new recipes. It also prioritizes the best match (highest expected rating) recipes with the input ingredient for that user. This is especially important for future use. If the user does not like a recipe recommended, they may not come back to the app - running the risk of wasted food. Finally, the recommender system allows users to denote if they would like to make a certain type of meal. This is important for users that have dietry restrictions. 
 
 ### Limitations
 While the recommendation application helps encourage the reduction of food waste at the household level, it does have limitations. First, since 79% of our original data comprised of reviews with 5 point rating, the recommender system skews to higher predicted ratings. This means that the difference between .01 predicted points at the higher end could be more significant than at lower levels. To remedy, one could repredict ratings of the original dataset using NLP. Further, the system does not take into account indiscriminate raters - or users that rate all recipes the same. This makes it more difficult to discern these user's preferences and thus their recommendations may not be as accurate. To fix this issue, we could again repredict their ratings based on the language of their reviews or follow up with more specific feedback. Finally, the collaborative filtering approach only works for users that have already reviewed recipes - new users cannot recieve predictions. This cold start probem could be remedied by recommending the highest rated recipes with a given ingredient to that user and asking them to review. They then could be added to the collaborative filtering pipeline. 
@@ -103,27 +103,25 @@ While the recommendation application helps encourage the reduction of food waste
 Overall, the application can help reduce food waste at the household level by allowing users to input ingredients that they currently have and delivering recipes that are relevant, matched to the user, and expected to be enjoyed. 
 
 ## Repository Structure
-├── Data
-│   ├── meta_Beauty.json.gz
-│   ├── reviews_Beauty_5.json.gz
-├── images
-│   ├── recommended_fragrance_products.png
-│   ├── recommended_products.png
-│   ├── reviews_distribution.png
-│   ├── reviews_per_product.png
-│   ├── reviews_per_user.png
+```
+├── Images
+│   ├── model_perfomance.png
+│   ├── rating_dist.png
+│   ├── rec_beef_any.png
+│   ├── rec_chicken_any.png
+│   ├── rec_tomato_nonveg.png
 ├── working_notebooks
-│   ├── Alex_notebook_2.ipynb
-│   ├── Alex_notebook_metadata.ipynb
-│   ├── jillian_notebook.ipynb
-│   ├── meg_notebook.ipynb
+│   ├── data_preprocessing.ipynb
+│   ├── reading_in_data.ipynb
+│   ├── recommendation_function_workbook.ipynb
 ├── .gitignore
 ├── LICENSE
 ├── README.md
 ├── final_notebook.ipynb
+├── meta_data_cleaning_workbook.ipynb
+└── modeling_workbook.ipynb
 ├── final_presentation.pdf
-└── final_notebook.pdf
-
+```
 
 
 
