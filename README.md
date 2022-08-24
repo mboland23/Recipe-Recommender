@@ -14,7 +14,7 @@ Data for this project came from Kaggle and looks at consumer [reviews and rating
 ### Data Instructions
 I downloaded the RAW_recipes.csv and RAW_interactions.csv locally to my computer in a Data file in the project repository. These are large files and will take some time to open in a jupyter notebook. First, I cleaned the RAW_interactions.csv file in my juptyer notebook to include only recipes that had at least five reviews and users that had at least five reviews - you can follow the notebook entitled "reading_in_data.ipnyb" to find initial cleaning instructions. I saved off this new dataset as  user_reviews.csv. I then further cleaned the dataset in a notebook entitled "preprocessing_no_0s", which explores the presence of 0 ratings and eventually drops those rows and creates a new dataset of recipes with five reviews and users with five ratings. This dataset, which can be found in the git Data repository, is called "user_reviews_no_zero.csv". This data was used for the remainder of the modeling and application. 
 
-Next, I dealt with the RAW_interactions.csv in the jupyter notebook entitled "meta_data_workbook_2". In that notebook I cleaned the data to have usable ingredients columns, created new nuitrition facts columns, and used a function to subcategorize recipes based on their food type. The final metadata recipe dataset was then called recipes_subcat_cleaned.csv and can be found in the git Data repository. 
+Next, I dealt with the RAW_interactions.csv in the jupyter notebook entitled "meta_data_cleaning_workbook". In that notebook I cleaned the data to have usable ingredients columns, created new nuitrition facts columns, and used a function to subcategorize recipes based on their food type. The final metadata recipe dataset was then called recipes_subcat_cleaned.csv and can be found in the git Data repository. 
 
 ## Data Preparation
 My final dataset included 537,267 reviews of 40,526 recipes from 17,096 users. 
@@ -48,7 +48,7 @@ Finally, I created a subcategorization function that labeled recipes on 8 differ
  - low cal
  - sugar free
 
-For a detailed look at the manipulation of the recipe/meta data please refer to the meta_data_workbook_2. The rest of this notebook uses the final csv file called "recipes_subcat_cleaned 2.csv" from this workbook. 
+For a detailed look at the manipulation of the recipe/meta data please refer to the meta_data_cleaning_workbook. The rest of this notebook uses the final csv file called "recipes_subcat_cleaned 2.csv" from this workbook. 
 
 The user data and recipe data are connected through unique recipe_id. 
 
@@ -59,9 +59,8 @@ To create recommendation systems I used the Surprise library. The performance of
 
 ![model performance](https://github.com/mboland23/Recipe-Recommender/blob/main/Images/model_performance.png)
   
-Once I determined the best model for my data, I created a recommendation function that takes in the user_id, the requested ingredient, any food types they may be looking to make, and the number of recipes. The tool then outputs the number of recipess containing that ingredient within the subset of food types based on predicted ratings that are calcuulated from that user's preferences compared to like users. An example is below. 
-  
-<Example of output from collaborative filtering model>
+Once I determined the best model for my data, I created a recommendation function that takes in the user_id, the requested ingredient, any food types they may be looking to make, and the number of recipes. The tool then outputs the number of recipess containing that ingredient within the subset of food types based on predicted ratings that are calcuulated from that user's preferences compared to like users. An example is found in the section below. 
+
 
 ## Recommendation Tool
 The collaborative filtering function created for users takes in four main inputs - the user ID, ingredient of interest, recipe type, and number of recipes. The function then outputs a given number of recipes that match the inputs for that user ID and that are predicted to be top rated. Below you can see two examples of the output of the function for the same user. The first is inputting two different ingredients and keeping the food type the same. In this case we use the subcategory of "any", which denotes any recipe (essentially no subcategory filtering". You can see the difference in the recommendations below.
