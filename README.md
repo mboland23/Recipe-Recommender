@@ -5,7 +5,7 @@ This project aims to help reduce food waste on the consumer level by using colla
 
 ![food waste](https://github.com/mboland23/Recipe-Recommender/blob/main/Images/food_waste_image.jpeg)
 
-## Business Problem: 
+## Business Problem 
 Food waste - or food that is fit for consumption but disposed of - is a major problem in the US with up to 40% of food produced going uneaten, according to [Harvard’s School of Public Health](https://www.hsph.harvard.edu/nutritionsource/sustainability/food-waste/). Further, there are environmental effects of food waste. 95% of uneaten food goes to landfills. This decomposing food produces methane gasses, which is a significant contributor to global warming and subsequently adds to climate change.  The reduction of food waste could not only lead to savings costs for consumers, but also help curb contributors to climate change. 
 
 While much of food waste comes at the macro level (transporation networks, restaurants and organizations), households prove to waste a substantial amount food - 1/3 of food obtained by households is wasted, according to [The Economist](https://www.economist.com/the-economist-explains/2016/08/28/why-wasting-food-is-bad-for-the-planet). By creating a food recommendation tool that takes into account what already exists in the consumer's fridge as well as that consumer's preferences, recipes will not only be relevant to the consumer, but also encourage consumers to use those ingredients rather than waste them.
@@ -14,9 +14,12 @@ While much of food waste comes at the macro level (transporation networks, resta
 Data for this project came from Kaggle and looks at consumer [reviews and ratings](https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions) of recipes from Food.com. For the purposes of this project, I used the RAW_recipes and RAW_interactions csv files to build new datasets. The original files are too large to add to Github and thus instructions on how to replicate my process can be found below.
 
 ### Data Instructions
-I downloaded the RAW_recipes.csv and RAW_interactions.csv locally to my computer in a Data file in the project repository. These are large files and will take some time to open in a jupyter notebook. First, I cleaned the RAW_interactions.csv file in my juptyer notebook to include only recipes that had at least five reviews and users that had at least five reviews - you can follow the notebook entitled "reading_in_data.ipnyb" to find initial cleaning instructions. I saved off this new dataset as  user_reviews.csv. I then further cleaned the dataset in a notebook entitled "preprocessing_no_0s", which explores the presence of 0 ratings and eventually drops those rows and creates a new dataset of recipes with five reviews and users with five ratings. This dataset, which can be found in the git Data repository, is called "user_reviews_no_zero.csv". This data was used for the remainder of the modeling and application. 
+- Download the RAW_recipes.csv and RAW_interactions.csv locally to a folder called Data in your repository from the file section of [Kaggle](https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions) . 
+- Follow the [reading_in_data notebook](https://github.com/mboland23/Recipe-Recommender/blob/main/working_notebooks/reading_in_data.ipynb) to clean the RAW_interactions.csv file to include only recipes that have at least five reviews and users with at least 5 reviews. The result of this notebook is a new, trimmed down data file called user_reviews.csv. Save this file locally in the same Data folder.
+- Follow the [data-preprocessing](https://github.com/mboland23/Recipe-Recommender/blob/main/working_notebooks/data-preprocessing.ipynb) notebook which takes the user_reviews.csv and explores the presence of zero ratings. The resulting dataset drops the zeros, and trims recipes and users down to the 5 count threshold. The new data set is called user_reviews_no_zero 2.csv. This file is then used in the modeling and final appliction in the final_notebook. 
 
-Next, I dealt with the RAW_interactions.csv in the jupyter notebook entitled "meta_data_cleaning_workbook". In that notebook I cleaned the data to have usable ingredients columns, created new nuitrition facts columns, and used a function to subcategorize recipes based on their food type. The final metadata recipe dataset was then called recipes_subcat_cleaned.csv and can be found in the git Data repository. 
+Next, I dealt with the meta data.
+- Open the RAW_interactions.csv in the jupyter notebook entitled [meta_data_cleaning_workbook](https://github.com/mboland23/Recipe-Recommender/blob/main/meta_data_cleaning_workbook.ipynb). In that notebook I cleaned the data to have usable ingredients columns, created new nuitrition facts columns, and used a function to subcategorize recipes based on their food type. The final metadata recipe dataset was then saved off in the Data folder as recipes_subcat_cleaned 2.csv. This file  was used in the final notebook. 
 
 ## Data Preparation
 My final dataset included 537,267 reviews of 40,526 recipes from 17,096 users. 
@@ -50,7 +53,7 @@ Finally, I created a subcategorization function that labeled recipes on 8 differ
  - low cal
  - sugar free
 
-For a detailed look at the manipulation of the recipe/meta data please refer to the meta_data_cleaning_workbook. The rest of this notebook uses the final csv file called "recipes_subcat_cleaned 2.csv" from this workbook. 
+For a detailed look at the manipulation of the recipe/meta data please refer to the [meta_data_cleaning_workbook](https://github.com/mboland23/Recipe-Recommender/blob/main/meta_data_cleaning_workbook.ipynb). The rest of this notebook uses the final csv file called "recipes_subcat_cleaned 2.csv" from this workbook. 
 
 The user data and recipe data are connected through unique recipe_id. 
 
@@ -85,7 +88,7 @@ And here is a look at the recommendations fo tomato recipes for that user with t
 
 ![food type = not vegetarian](https://github.com/mboland23/Recipe-Recommender/blob/main/Images/rec_tomato_nonveg.png)
 
-For more on the recommendation function, including the dictionary of ingredient variations that ensures recipes that have variations (diced tomato vs. tomato) are taken into account in the ingredient input, please look at the recommendation_function_workbook. 
+For more on the recommendation function, including the dictionary of ingredient variations that ensures recipes that have variations (diced tomato vs. tomato) are taken into account in the ingredient input, please look at the [recommendation_function_workbook](https://github.com/mboland23/Recipe-Recommender/blob/main/working_notebooks/recommendation_function_workbook.ipynb). 
 
 
 ## Conclusions 
